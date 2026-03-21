@@ -2,6 +2,7 @@ package varone
 
 import (
 	"fmt"
+	"strings"
 	"unicode"
 )
 
@@ -9,12 +10,16 @@ type Account struct {
 	balance float64
 }
 
-func (acc *Account) Deposit(amount float64) {
+func (acc *Account) Deposit(amount float64) error {
+	if amount < 0 {
+		return fmt.Errorf("insufficient funds")
+	}
 	acc.balance += amount
+	return nil
 }
 
 func (acc *Account) Withdraw(amount float64) error {
-	if (acc.balance - amount) < 0 {
+	if amount > acc.balance {
 		return fmt.Errorf("insufficient funds")
 	}
 	acc.balance -= amount
@@ -32,8 +37,9 @@ func sum(nums ...int) (sum int) {
 func clean(data []string) []string {
 	var i int
 	for _, s := range data {
-		if s != "" {
-			data[i] = s
+		sTrim := strings.TrimSpace(s)
+		if sTrim != "" {
+			data[i] = sTrim
 			i++
 		}
 	}

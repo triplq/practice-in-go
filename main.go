@@ -5,6 +5,9 @@ import (
 )
 
 func main() {
-	smart := projectpatterns.NewSmartHouseFacade()
-	smart.GoodNight()
+	shop := &projectpatterns.Shop{}
+	shop.SetStrategy(&projectpatterns.Cash{})
+	shop.MakePay(20)
+	shop.SetStrategy(&projectpatterns.Card{})
+	shop.MakePay(50)
 }

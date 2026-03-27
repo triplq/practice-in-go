@@ -12,14 +12,24 @@ func (bs *BaseService) DoSomething(input string) string {
 	return "Procces: " + input
 }
 
-type LoggingWrapper struct {
+type WrappedService struct {
 	next Service
 }
 
-func (w *LoggingWrapper) DoSomething(input string) string {
+func (w *WrappedService) DoSomething(input string) string {
 	fmt.Println("Before:", input)
 	result := w.next.DoSomething(input)
 	fmt.Println("After:", result)
 
 	return result
+}
+
+func demo_main() {
+	simple := &BaseService{}
+
+	wrapped := &WrappedService{
+		next: simple,
+	}
+
+	fmt.Println(wrapped.DoSomething("Hello"))
 }

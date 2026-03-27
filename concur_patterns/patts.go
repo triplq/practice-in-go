@@ -1,5 +1,11 @@
 package concurpatterns
 
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
 func Gener() <-chan int {
 	ch := make(chan int)
 
@@ -27,4 +33,31 @@ func Fanin(input1, input2 <-chan string) <-chan string {
 	}()
 
 	return ch
+}
+
+func worker(wg *sync.WaitGroup, ch <-chan int) {
+	wg.Done()
+	for v := range ch {
+		fmt.Println(v)
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func Sender() {
+	ch := make(chan int)
+	var wg sync.WaitGroup
+
+	for i := 0; i < 2; i++ {
+		wg.Add(1)
+		go worker(&wg, ch)
+	}
+
+	for i := 0; i < 10; i++ {
+		ch <- i
+	}
+
+	close(ch)
+
+	wg.Wait()
+	fmt.Println("done")
 }

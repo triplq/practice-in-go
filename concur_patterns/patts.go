@@ -35,7 +35,7 @@ func Fanin(input1, input2 <-chan string) <-chan string {
 	return ch
 }
 
-func worker(wg *sync.WaitGroup, ch <-chan int) {
+func work(wg *sync.WaitGroup, ch <-chan int) {
 	wg.Done()
 	for v := range ch {
 		fmt.Println(v)
@@ -49,7 +49,7 @@ func Sender() {
 
 	for i := 0; i < 2; i++ {
 		wg.Add(1)
-		go worker(&wg, ch)
+		go work(&wg, ch)
 	}
 
 	for i := 0; i < 10; i++ {

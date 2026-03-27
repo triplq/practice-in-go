@@ -7,3 +7,9 @@ func TestSender(t *testing.T) {
 		Sender()
 	})
 }
+
+func TestPool(t *testing.T) {
+	t.Run("Pool", func(t *testing.T) {
+		Demo_pool()
+	})
+}

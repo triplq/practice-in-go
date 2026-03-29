@@ -3,7 +3,9 @@ package vartwo
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -32,7 +34,22 @@ func (s *SMS) Send(msg string) error {
 	return nil
 }
 
-func Fan([]Sender, m)
+func Fan(senders []Sender, msg string) {
+	var wg sync.WaitGroup
+
+	for _, s := range senders {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			err := s.Send(msg)
+			if err != nil {
+				fmt.Fprint(os.Stderr, err)
+			}
+		}()
+	}
+
+	wg.Wait()
+}
 
 func ExternalCall() string {
 	time.Sleep(2 * time.Second)
